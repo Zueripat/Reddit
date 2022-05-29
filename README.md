@@ -32,7 +32,8 @@ The script `test.py` is a Script which you can use to test out the possibilities
 
 `Reddit Application` Create your own Reddit Application on the following Website: https://www.reddit.com/prefs/apps
 
-![asasfasrf](https://user-images.githubusercontent.com/66902977/170886649-282562a0-6b75-4897-86b6-3a072a261ad2.PNG)
+![asasfasrf](https://user-images.githubusercontent.com/66902977/170887501-f81612be-d05e-41c9-8d65-d7650061aa44.PNG)
+
 
 ### Python Libraries
 
