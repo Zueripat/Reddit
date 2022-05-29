@@ -17,6 +17,7 @@ Reddit API is a Python Class, that lets you easely establish a connection to the
 ## Setup
 
 Steps you need to complete before you can use these Scripts
+
 The script `test.py` is a Script which you can use to test out the possibilities of this redditApi Class
 
 ### Config File
