@@ -12,3 +12,28 @@ Reddit API is a Python Class, that lets you easely establish a connection to the
 `get_url` This Function within the redditApi class lets you get a the Image url from any specific Post and returns a list of one Dictionary, which contain the Post ID, Image url and Post Title.
 
 `get_header` Return you the Header Information for you to make further Requests
+
+
+## Setup
+
+Steps you need to complete before you can use these Scripts
+
+### Config File
+
+`username` Your Reddit Account Username
+
+`password` Your Reddit Account Password
+
+`client_id` The Application ID of your Reddit Application
+
+`secret` The Secret of your Reddit Apllication
+
+`Reddit Application` Create your own Reddit Application on the following Website: https://www.reddit.com/prefs/apps
+
+![asasfasrf](https://user-images.githubusercontent.com/66902977/170886649-282562a0-6b75-4897-86b6-3a072a261ad2.PNG)
+
+### Python Libraries
+
+When Installing Python 3.10.4 most of the Modules used in this Script will be pre Installed
+
+`requests` Download the requests module using the command: `pip install requests` in the console
