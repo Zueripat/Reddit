@@ -2,6 +2,8 @@
 
 Reddit API is a Python Class, that lets you easely establish a connection to the Reddit Api. The idea behind this is to dowload Images, Animated Images and Videos from Reddit Posts.
 
+The script `test.py` is a Script which you can use to test out the functions of the redditApi Class
+
 ## Features
 `request_posts` This Function within the redditApi class lets you get between 1 and 100 posts from any subreddit and returns a list of Dictionaries, which contain the Post ID, Image url and Post Title.
 
@@ -18,7 +20,6 @@ Reddit API is a Python Class, that lets you easely establish a connection to the
 
 Steps you need to complete before you can use these Scripts
 
-The script `test.py` is a Script which you can use to test out the possibilities of this redditApi Class
 
 ### Config File
 
