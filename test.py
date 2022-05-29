@@ -31,15 +31,15 @@ def req(output):
     fin_path = f"{dest}{'/' if not dest.endswith('/') else ''}{__name}.{str(__url).split('.')[-1]}"
     if not os.path.exists(fin_path):
         try:
-            # print(f"[ {count}/{amount} ]: Getting Picture...", end=" ")
+            print(f"[ {count}/{amount} ]: Getting Picture...", end=" ")
             open(fin_path, "wb").write(requests.get(__url).content)
             success += 1
-            # print(__dic)
+            print(__dic)
         except Exception as err:
-            # print({'Error': {__url: err}}, __id)
+            print({'Error': {__url: err}}, __id)
             fail += 1
     else:
-        # print(f"[ {count}/{amount} ]: Getting Picture... { {'File already exists': __dic} }")
+        print(f"[ {count}/{amount} ]: Getting Picture... { {'File already exists': __dic} }")
         existing += 1
     count += 1
 
@@ -66,8 +66,7 @@ while inputChoice != "x":
         mode = input("Mode: ")
         if mode == "hot" or mode == "new" or mode == "top" or mode == "random" or mode == "best": break
         else: print("Please enter a valid mode")
-
-    print(f"-----------------------------------\nExpected Runtime ~{float(amount)*0.15}s - {float(amount)*0.40}s with 50% of pictures being successfully downloaded...")
+    # print(f"-----------------------------------\nExpected Runtime ~{float(amount)*0.15}s - {float(amount)*0.40}s with 50% of pictures being successfully downloaded...")
     start = time()
     if mode == "random":
         with concurrent.futures.ThreadPoolExecutor() as executor:
