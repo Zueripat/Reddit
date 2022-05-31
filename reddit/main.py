@@ -29,5 +29,15 @@ class redditApi:
         __request = requests.get(f'https://oauth.reddit.com/r/{subreddit}/comments/{post_id}', headers=self.__headers).json()
         return [{post["data"]["id"]: {post["data"]["title"]: post["data"]["url"]}} for post in __request[0]["data"]["children"]][0]
 
-    def get_header(self):
-        return self.__headers
+    def get_gallery(self, subreddit, post_id):
+        __request = requests.get(f"https://www.reddit.com/r/{subreddit}/comments/{post_id}.json", headers=self.__headers_old).json()
+        try:
+            posts = [posts["data"]["media_metadata"] for posts in __request[0]["data"]["children"]][0]
+            return [posts[post]["p"][-1:][0]["u"].replace("preview.redd.it", "i.redd.it") for post in posts]
+        except Exception as err: return err
+
+    def get_vreddit(self, subreddit, post_id):
+        __request = requests.get(f"https://www.reddit.com/r/{subreddit}/comments/{post_id}.json", headers=self.__headers_old).json()
+        posts = [posts["data"] for posts in __request[0]["data"]["children"]][0]
+        try: return [posts["secure_media"]["reddit_video"]["fallback_url"]]
+        except Exception as err: return err
