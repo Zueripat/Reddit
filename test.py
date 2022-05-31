@@ -4,6 +4,8 @@ from time import time
 from reddit.main import redditApi
 import concurrent.futures
 
+# On Error check Reddit API Status: https://www.redditstatus.com/ or the File which Failed
+
 def redgifs(url):
     website = requests.get(url).text
     for element in website.split('"'):
@@ -34,29 +36,24 @@ def req(output):
     __name = str(list(__dic.keys())[0])
     for symbol in ["/", "\\", ":", "*", "?", '"', "<", ">", "|", "."]: __name = __name.replace(symbol, "-")
     fin_path = f"{dest}{'/' if not dest.endswith('/') else ''}{__name}.{str(__url).split('.')[-1]}"[:-2].split("?")[0]
-    try:
-        print(f"[ {count}/{amount} ]: Getting Picture...", end=" ")
-        picCount = 1
-        for each in __url:
-            if len(__url) > 1:
-                path = f"{fin_path.split('.')[0]} ({picCount}).{fin_path.split('.')[1]}"
-                if not os.path.isfile(path):
-                    open(path, "wb").write(requests.get(each).content)
+    if not os.path.exists(fin_path):
+        try:
+            print(f"[ {count}/{amount} ]: Getting Picture...", end=" ")
+            picCount = 1
+            for pic in __url:
+                if len(__url) > 1:
+                    open(f"{fin_path.split('.')[0]} ({picCount}).{fin_path.split('.')[1]}", "wb").write(requests.get(pic).content)
                     picCount += 1
                 else:
-                    print(f"[ {count}/{amount} ]: Getting Picture... { {'File already exists': __dic} }")
-                    existing += 1
-            else:
-                if not os.path.isfile(fin_path):
-                    open(fin_path, "wb").write(requests.get(each).content)
-                else:
-                    print(f"[ {count}/{amount} ]: Getting Picture... { {'File already exists': __dic} }")
-                    existing += 1
-            success += 1
-        print(__dic)
-    except Exception as err:
-        print({'Error': {__id: err}})
-        fail += 1
+                    open(fin_path, "wb").write(requests.get(pic).content)
+                success += 1
+            print(__dic)
+        except Exception as error:
+            print({'Error': error})
+            fail += 1
+    else:
+        print(f"[ {count}/{amount} ]: Getting Picture... { {'File already exists': __dic} }")
+        existing += 1
     count += 1
 
 api = redditApi("./reddit/config.json")
