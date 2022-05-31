@@ -5,45 +5,61 @@ from reddit.main import redditApi
 import concurrent.futures
 
 def redgifs(url):
-    website = requests.get(url).content.decode()
+    website = requests.get(url).text
     for element in website.split('"'):
-        if element.endswith(".mp4") and not element.endswith("-mobile.mp4"): return element
+        if element.endswith(".mp4") and not element.endswith("-mobile.mp4"): return [element]
 
 def imgur_i_reddit(url):
-    if url.endswith(".jpg") or url.endswith(".png") or url.endswith(".jpeg") or url.endswith(".gif"): return url
+    if url.endswith(".jpg") or url.endswith(".png") or url.endswith(".jpeg") or url.endswith(".gif"): return [url]
     else:
-        website = requests.get(url).content.decode()
+        website = requests.get(url).text
         for element in website.split('"'):
-            if element.endswith(".jpg"): return element
+            if url.endswith("gifv"):
+                if element.endswith(".mp4"): return [element]
+            else:
+                if element.endswith(".jpg"): return [element]
 
-def filtering(url):
+def filtering(url, __id, sub):
     if "redgifs.com" in url: return redgifs(url)
     if "i.imgur.com" in url or "i.redd.it" in url or "imgur.com/a" in url: return imgur_i_reddit(url)
-    else: return url
+    if "/gallery/" in url: return api.get_gallery(sub, __id)
+    if "v.redd.it" in url: return api.get_vreddit(sub, __id)
+    else: return [url]
 
 def req(output):
     global success, fail, existing, count
     __id = list(output.keys())[0]
     __dic = output[__id]
-    __url = filtering(__dic[list(__dic.keys())[0]])
+    __url = filtering(__dic[list(__dic.keys())[0]], __id, subreddit)
     __name = str(list(__dic.keys())[0])
-    for symbol in ["/", "\\", ":", "*", "?", '"', "<", ">", "|"]: __name = __name.replace(symbol, "-")
-    fin_path = f"{dest}{'/' if not dest.endswith('/') else ''}{__name}.{str(__url).split('.')[-1]}"
-    if not os.path.exists(fin_path):
-        try:
-            print(f"[ {count}/{amount} ]: Getting Picture...", end=" ")
-            open(fin_path, "wb").write(requests.get(__url).content)
+    for symbol in ["/", "\\", ":", "*", "?", '"', "<", ">", "|", "."]: __name = __name.replace(symbol, "-")
+    fin_path = f"{dest}{'/' if not dest.endswith('/') else ''}{__name}.{str(__url).split('.')[-1]}"[:-2].split("?")[0]
+    try:
+        print(f"[ {count}/{amount} ]: Getting Picture...", end=" ")
+        picCount = 1
+        for each in __url:
+            if len(__url) > 1:
+                path = f"{fin_path.split('.')[0]} ({picCount}).{fin_path.split('.')[1]}"
+                if not os.path.isfile(path):
+                    open(path, "wb").write(requests.get(each).content)
+                    picCount += 1
+                else:
+                    print(f"[ {count}/{amount} ]: Getting Picture... { {'File already exists': __dic} }")
+                    existing += 1
+            else:
+                if not os.path.isfile(fin_path):
+                    open(fin_path, "wb").write(requests.get(each).content)
+                else:
+                    print(f"[ {count}/{amount} ]: Getting Picture... { {'File already exists': __dic} }")
+                    existing += 1
             success += 1
-            print(__dic)
-        except Exception as err:
-            print({'Error': {__url: err}}, __id)
-            fail += 1
-    else:
-        print(f"[ {count}/{amount} ]: Getting Picture... { {'File already exists': __dic} }")
-        existing += 1
+        print(__dic)
+    except Exception as err:
+        print({'Error': {__id: err}})
+        fail += 1
     count += 1
 
-api = redditApi("config.json")
+api = redditApi("./reddit/config.json")
 inputChoice = ""
 
 while True:
@@ -72,18 +88,18 @@ while inputChoice != "x":
         with concurrent.futures.ThreadPoolExecutor() as executor:
             results = [executor.submit(api.request_random, subreddit) for _ in range(int(amount))]
             for f in concurrent.futures.as_completed(results):
-                req(f.result())
+                try: req(f.result())
+                except Exception as err: print(err)
     else:
         if int(amount) > 100: amount = 100
         for post in api.request_posts(subreddit, mode, int(amount)):
             req(post)
     end = time()
     print(f"-----------------------------------\n"
-              f"Total Pictures: {fail + success + existing}/{amount}\n"
+              f"Total Pictures: {fail + success + existing}\n"
               f"Successful: {success}\n"
               f"Failed: {fail}\n"
               f"Existing: {existing}\n"
               f"Total Time: {round((end - start), 2)} seconds\n"
               f"Average Time: {round(((end - start) / (fail + success + existing)), 2)} seconds\n"
               f"-----------------------------------")
-   
