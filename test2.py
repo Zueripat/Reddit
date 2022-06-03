@@ -125,6 +125,6 @@ while True:
         print(f"######################################\nDownloading {amount} posts from {subb} in {mode} mode to {dest}\n", end="")
         download(mode, amount, subb, dest)
         end = time()
-        print(f"Finished after: {round(end - start, 2)} seconds\nTotal Pictures: {success+fail+existing}\nSuccess: {success}\nFail: {fail}\nExisting: {existing}\n######################################")
+        print(f"Finished after: {round(end - start, 2)} seconds\nTotal Pictures: {success+fail+existing}, Success: {success}, Fail: {fail}, Existing: {existing}\n######################################\n")
     print("Sleeping for 1h...\n")
     sleep(int(__sleep) * 3600) # Sleep for 1 hour
