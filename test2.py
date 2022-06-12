@@ -125,5 +125,5 @@ while True:
         download(mode, amount, subb, dest)
         end = time()
         print(f"Finished after: {round(end - start, 2)} seconds\nTotal Pictures: {success+fail+existing}, Success: {success}, Fail: {fail}, Existing: {existing}\n######################################\n")
-    print("Sleeping for 1h...\n")
+    print(f"Sleeping for {__sleep} hour(s)...\n")
     sleep(int(__sleep) * 3600) # Sleep for 1 hour
