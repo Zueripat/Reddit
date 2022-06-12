@@ -28,8 +28,6 @@ def filtering(url, __id, sub):
     if "v.redd.it" in url: return api.get_vreddit(sub, __id)
     else: return [url]
 
-api = redditApi("config.json")
-
 def inputs(ampunt_in):
     subreddit = []
     amount = []
@@ -119,6 +117,7 @@ __sleep = input("Sleep time (h): ")
 # amounts = []
 # modes = []
 while True:
+    api = redditApi("config.json")
     for (dest, subb, amount, mode) in zip(dests, subs, amounts, modes):
         success, fail, existing, count = (0, 0, 0, 1)
         start = time()
